@@ -1,24 +1,30 @@
 @echo off
+setlocal EnableDelayedExpansion
 chcp 65001 >nul
 
-echo [INFO] setup-links.bat 
+:: Set env variables
+set DST=C:\apps\tools
+
+cd %~dp0\..
+set REPO=%CD%
+set SRC=%REPO%\tools
+
+echo [INFO] === setup-links.bat === 
 echo [INFO] Starting symlink setup...
 
+echo [INFO] Repository path : %REPO%
+echo [INFO] Source path     : %SRC%
+echo [INFO] Destination path: %DST%
 
-ech[INFO] Checking administrator privileges...
-net session >nul 2>&1
-if %enulorlevel% neq 0 (
+echo [INFO] Checking administrator privileges...
+net session >nul 2>nul
+if %errorlevel% neq 0 (
     echo [ERROR] This script requires administrator privileges.
     echo [ERROR] Please run as administrator.
     pause
     exit /b 1
 )
 
-set REPO=Z:\github.com\yasuhiro112358\cmd-tools
-echo [INFO] Repository path: %REPO%
-
-REM ソースディレクトリの存ls
-echo [INFO] Source path: %SRC%
 if not exist "%SRC%" (
     echo [ERROR] Source directory does not exist: %SRC%
     echo [ERROR] Please check the repository path.
@@ -26,11 +32,9 @@ if not exist "%SRC%" (
     exit /b 1
 )
 
-set DST=C:\apps\tools
-echo [INFO] Destination path: %DST%
 
 if not exist "%DST%" (
-    eo [INFO] Making directory: %DST%
+    echo [INFO] Making directory: %DST%
     mkdir "%DST%"
     if %errorlevel% neq 0 (
         echo [ERROR] Failed to create directory: %DST%
@@ -41,25 +45,21 @@ if not exist "%DST%" (
 
 echo [INFO] Processing .bat files in %SRC%...
 set /a count=0
-for %%F in ("%SRC%\*.bat") do (
-    set "SRCFILE=%%~fF"
-    set "DSTLINK=%DST%\%%~nxF"
-    set /a count+=1
 
-    if exist "%DST%\%%~nxF" (
-        echo [SKIP] Already exists: %DST%\%%~nxF
+for %%F in ("%SRC%\*.bat") do (
+	set "SRCFILE=%%~fF"
+	set "DSTLINK=!DST!\%%~nxF"
+	
+    if exist "!DST!\%%~nxF" (
+        echo [INFO] Already exists: !DST!\%%~nxF
     ) else (
-        echo [LINK] Creating symlink: %%~nxF
-        echo       Source: %%~fF
-        echo       Target: %DST%\%%~nxF
-        mklink "%DST%\%%~nxF" "%%~fF"
-        if %errrlevel% neq 0 (
+        echo [INFO] Creating symlink: %%~nxF
+        mklink "!DST!\%%~nxF" "%%~fF"
+        if !errrlevel! neq 0 (
             echo [ERROR] Failed to create symlink for: %%~nxF
-        ) else (
-            echo [SUCCESS] Symlink created successfully.
-        )
-    )
-    echo.
+        ) 
+    )	
+	set /a count+=1
 )
 
 echo [INFO] Processing completed. Total files processed: %count%
