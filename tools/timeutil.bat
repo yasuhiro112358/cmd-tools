@@ -22,7 +22,7 @@ for /f "tokens=3" %%I in (
 ) do (
     set "IDATE=%%I"
 )
-echo [DEBUG] iDate=%IDATE%
+:: echo [DEBUG] iDate=%IDATE%
 
 :: Get sDate (date separator) from registry
 set "SDATE=/"
@@ -31,7 +31,7 @@ for /f "tokens=3" %%S in (
 ) do (
     set "SDATE=%%S"
 )
-echo [DEBUG] sDate=%SDATE%
+:: echo [DEBUG] sDate=%SDATE%
 
 :: Delims include space to handle cases like "Wed 2024/06/12"
 set "DELIMS=%SDATE% "
@@ -40,7 +40,7 @@ for /f "tokens=1-4 delims=%DELIMS%" %%A in (
 ) do (
     set "D1=%%A" & set "D2=%%B" & set "D3=%%C" & set "D4=%%D"
 )
-echo [DEBUG] D1=%D1%, D2=%D2%, D3=%D3%, D4=%D4%
+:: echo [DEBUG] D1=%D1%, D2=%D2%, D3=%D3%, D4=%D4%
 
 :: [Issue] D1が曜日の場合がある (例: "Wed 2024/06/12")
 :: [Issue] Yearが2桁の場合がある (例: "24/06/12")
@@ -70,7 +70,7 @@ if "%HH:~0,1%"==" " (
 set "NN=%TIME:~3,2%"
 set "SS=%TIME:~6,2%"
 
-echo [DEBUG] YYYY=%YYYY%, MM=%MM%, DD=%DD%, HH=%HH%, NN=%NN%, SS=%SS%
+:: echo [DEBUG] YYYY=%YYYY%, MM=%MM%, DD=%DD%, HH=%HH%, NN=%NN%, SS=%SS%
 
 set "O_DATE=%YYYY%-%MM%-%DD%"
 set "O_TIME=%HH%:%NN%:%SS%"
@@ -83,9 +83,9 @@ endlocal & (
   set "ISO_TIMESTAMP=%O_TIMESTAMP%"
   set "ISO_FILE_TIMESTAMP=%O_FILE_TIMESTAMP%"
 )
-echo [DEBUG] ISO_DATE=%ISO_DATE%
-echo [DEBUG] ISO_TIME=%ISO_TIME%
-echo [DEBUG] ISO_TIMESTAMP=%ISO_TIMESTAMP%
-echo [DEBUG] ISO_FILE_TIMESTAMP=%ISO_FILE_TIMESTAMP%
+:: echo [DEBUG] ISO_DATE=%ISO_DATE%
+:: echo [DEBUG] ISO_TIME=%ISO_TIME%
+:: echo [DEBUG] ISO_TIMESTAMP=%ISO_TIMESTAMP%
+:: echo [DEBUG] ISO_FILE_TIMESTAMP=%ISO_FILE_TIMESTAMP%
 
 exit /b 0
